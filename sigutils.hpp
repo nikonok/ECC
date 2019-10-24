@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #include <cryptopp/sha.h>
 #include <cryptopp/filters.h>
@@ -65,6 +66,7 @@ namespace ECDSA {
         BigInt q;
         Point<BigInt> G;
 
+        SignStruct(){}
         SignStruct(BigInt pkey, BigInt _q, Point<BigInt> g):
                    privkey(pkey), q(_q), G(g)
         {}
@@ -84,6 +86,7 @@ namespace ECDSA {
         bool flag = true;
         BigInt r = 0;
         BigInt s = 0;
+        auto start = std::chrono::steady_clock::now();
         while(flag){
             try {
                 // hash msg
@@ -110,7 +113,14 @@ namespace ECDSA {
                     sgn.G, sgn.q, sgn.G);
                     flag = !ECDSA::verify(vgn, msg, std::make_pair(r, s));
                 }
+                if(std::chrono::duration <double, std::milli>(std::chrono::steady_clock::now() - start).count() > 3.0) {
+                    throw "gg";
+                }
             } catch (const char*){
+                
+                if(std::chrono::duration <double, std::milli>(std::chrono::steady_clock::now() - start).count() > 3.0) {
+                    throw "gg";
+                }
                 continue;
             }
         }
@@ -119,6 +129,7 @@ namespace ECDSA {
 
     bool verify(VerifyStruct vgn, std::string msg, signature msg_sgn) {
         bool flag = true;
+        auto start = std::chrono::steady_clock::now();
         while(flag){
             try {
                 auto hashed = SHA256(msg);
@@ -135,6 +146,9 @@ namespace ECDSA {
                     return true;
                 flag = false;
             } catch (const char*){
+                if(std::chrono::duration <double, std::milli>(std::chrono::steady_clock::now() - start).count() > 3) {
+                    return false;
+                }
                 continue;
             }
         }

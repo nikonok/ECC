@@ -22,16 +22,15 @@ int main(){
 
 try{
     // random curve from Web
-    ECDSA::BigInt a = 6;
-    ECDSA::BigInt b = 3;
-    ECDSA::BigInt m = 11;
-    ECDSA::BigInt x = 9;
-    ECDSA::BigInt y = 4;
+    ECDSA::BigInt a = 6; // 6
+    ECDSA::BigInt b = 3; // 3
+    ECDSA::BigInt m = 11; //11
+    ECDSA::BigInt x = 9; // 9
+    ECDSA::BigInt y = 4; // 4
     Point<ECDSA::BigInt> G(x, y, a, b, m);
-    ECDSA::BigInt q = 5;
-    ECDSA::BigInt privkey = ECDSA::get_secret(q, G);
-    auto pubkey = privkey * G;
-
+    ECDSA::BigInt q = 5; // 5
+    ECDSA::BigInt privkey;
+    Point<ECDSA::BigInt> pubkey;
 
     // {
     //     privkey = 4;
@@ -40,8 +39,19 @@ try{
 
     std::string message("Hello World!");
 
-    ECDSA::SignStruct sgn(privkey, q, G);
-    auto sign = ECDSA::sign(sgn, message);
+    ECDSA::SignStruct sgn;
+    ECDSA::signature sign;
+    {
+        CATCHTHAT:
+        try{
+            privkey = ECDSA::get_secret(q, G);
+            pubkey = privkey * G;
+            sgn = ECDSA::SignStruct(privkey, q, G);
+            sign = ECDSA::sign(sgn, message);
+        } catch(const char* e){
+            goto CATCHTHAT;
+        }
+    }
 
     ECDSA::VerifyStruct vgn(pubkey, q, G);
     auto is_valid = ECDSA::verify(vgn, message, sign);

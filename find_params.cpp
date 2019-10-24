@@ -197,7 +197,7 @@ int main(){
 
     std::cout << "Points in total = " << xy_set.size() << std::endl;
 
-    { // code for testing
+    {   // code for testing
         std::cout << "Testing params(1, 0, 23):" << std::endl;
         
         auto found = find_x_y(1, 0, 23);
