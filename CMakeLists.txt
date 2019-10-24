@@ -19,3 +19,13 @@ add_library(cryptopp STATIC ${CryptoPP_SOURCES} ${CryptoPP_HEADERS})
 add_executable(signature signature.cpp sigutils.hpp)
 target_link_libraries(signature PUBLIC cryptopp)
 target_include_directories(signature PUBLIC ${CryptoPP_DIR})
+
+## ECC
+set(ECC_DIR "ecc/include")
+file(GLOB ECC_SOURCES "ecc/include/ecc/*.c")
+file(GLOB ECC_HEADERS "ecc/include/ecc/*.h")
+add_library(ecc STATIC ${ECC_SOURCES} ${ECC_HEADERS})
+
+add_executable(sign sign.cpp sigutils.hpp)
+target_link_libraries(sign PUBLIC cryptopp ecc)
+target_include_directories(sign PUBLIC ${CryptoPP_DIR} ${ECC_DIR})

@@ -1,3 +1,6 @@
 [submodule "cryptopp/include/cryptopp"]
 	path = cryptopp/include/cryptopp
 	url = https://github.com/weidai11/cryptopp.git
+[submodule "ecc/include/ecc"]
+	path = ecc/include/ecc
+	url = https://github.com/esxgx/easy-ecc.git
