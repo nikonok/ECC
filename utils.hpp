@@ -105,6 +105,8 @@ public:
 private:
     T get_lamda(const Point& p) const {
         if(*this != p) {
+            if(p.x - x < 0)
+                return mod<T>(-(p.y - y) * modInverse<T>(-(p.x - x), modulo), modulo);
             return mod<T>((p.y - y) * modInverse<T>(p.x - x, modulo), modulo);
         } else {
             return mod<T>( (3 * modpow<T>(x, 2, modulo) + a) *  modInverse<T>(2 * y, modulo), modulo);
